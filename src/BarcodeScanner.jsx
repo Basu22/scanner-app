@@ -17,20 +17,25 @@ const BarcodeScanner = ({ onDetected }) => {
           inputStream: {
             type: "LiveStream",
             constraints: {
-              width: 640,
-              height: 480,
-              facingMode: "environment", // Usa la cámara trasera
+              width: 1280, 
+              height: 720,
+              facingMode: "environment", 
             },
-            target: scannerRef.current, // Dónde se mostrará la cámara
+            target: scannerRef.current,
           },
           decoder: {
-            readers: ["ean_reader"], // Tipos de códigos a leer
+            readers: ["ean_reader"],
           },
+          locator: {
+            patchSize: "small", // Prueba "medium" o "large" si sigue sin detectar
+            halfSample: false,
+          },
+          locate: false, // Desactiva la localización automática
+          numOfWorkers: navigator.hardwareConcurrency || 4, // Usa múltiples hilos para mejorar rendimiento
         },
         (err) => {
           if (err) {
             console.error("Error al iniciar Quagga:", err);
-            setError("No se pudo iniciar la cámara.");
             return;
           }
           Quagga.start();
