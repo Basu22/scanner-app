@@ -9,9 +9,9 @@ const BarcodeScanner = ({ onDetected }) => {
     
     import("quagga").then((module) => {
       Quagga = module.default;
-  
+
       if (!scannerRef.current) return;
-  
+
       Quagga.init(
         {
           inputStream: {
@@ -19,35 +19,34 @@ const BarcodeScanner = ({ onDetected }) => {
             constraints: {
               width: 640,
               height: 480,
-              facingMode: { exact: "environment" }, // Asegura usar la cámara trasera
+              facingMode: "environment", // Usa la cámara trasera
             },
-            target: scannerRef.current,
+            target: scannerRef.current, // Dónde se mostrará la cámara
           },
           decoder: {
-            readers: ["ean_reader", "code_128_reader"],
+            readers: ["ean_reader"], // Tipos de códigos a leer
           },
         },
         (err) => {
           if (err) {
             console.error("Error al iniciar Quagga:", err);
-            setError(`Error: ${err.message || "No se pudo iniciar la cámara."}`);
+            setError("No se pudo iniciar la cámara.");
             return;
           }
           Quagga.start();
         }
       );
-  
+
       Quagga.onDetected((data) => {
         onDetected(data.codeResult.code);
       });
     });
-  
+
     return () => {
       if (Quagga) Quagga.stop();
     };
   }, [onDetected]);
 
-  
   return (
     <div>
       {error && <p style={{ color: "red" }}>{error}</p>}
