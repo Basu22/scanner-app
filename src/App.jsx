@@ -8,8 +8,8 @@ const App = () => {
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
       <h1>Escáner de Códigos de Barras</h1>
-      <BarcodeScanner onDetected={setScannedCode} />
       {scannedCode && <h2>Código escaneado: {scannedCode}</h2>}
+      <BarcodeScanner onDetected={setScannedCode} />
     </div>
   );
 };
